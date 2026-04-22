@@ -53,7 +53,7 @@ git push -u origin main
 5. Click **Save**
 
 Your site will be live at:
-`https://YOUR-USERNAME.github.io/taskflow`
+`https://Hamzahxvi.github.io/taskflow`
 
 > **Note:** GitHub Pages may take 1–3 minutes to go live after the first push.
 
