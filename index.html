@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow — Your Workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+
+    <!-- ─── AUTH SCREEN ─────────────────────────────────── -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-left">
+            <div class="auth-brand">
+                <div class="brand-mark">✦</div>
+                <h1 class="brand-name">TaskFlow</h1>
+                <p class="brand-tagline">Your thoughts, organized beautifully.</p>
+            </div>
+            <div class="auth-floats">
+                <div class="float-card fc-1"><span class="fc-icon">📌</span><span>Design system review</span><span class="fc-badge high">High</span></div>
+                <div class="float-card fc-2"><span class="fc-icon">🚀</span><span>Deploy to production</span><span class="fc-badge med">Medium</span></div>
+                <div class="float-card fc-3 done"><span class="fc-icon">✅</span><span>User research done</span><span class="fc-badge low">Low</span></div>
+                <div class="float-card fc-4"><span class="fc-icon">📖</span><span>Study algorithms</span><span class="fc-badge high">High</span></div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <div class="auth-box">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+                    <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Register</button>
+                    <div class="tab-slider" id="tabSlider"></div>
+                </div>
+
+                <!-- Login -->
+                <div id="loginForm" class="auth-form">
+                    <h2>Welcome back</h2>
+                    <p class="auth-sub">Continue where you left off.</p>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUser" placeholder="Enter username" autocomplete="username"
+                               onkeydown="if(event.key==='Enter')handleLogin()">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-wrap">
+                            <input type="password" id="loginPass" placeholder="Enter password" autocomplete="current-password"
+                                   onkeydown="if(event.key==='Enter')handleLogin()">
+                            <button class="eye-btn" onclick="togglePw('loginPass',this)">👁</button>
+                        </div>
+                    </div>
+                    <div id="loginErr" class="auth-error"></div>
+                    <button class="btn-primary btn-full" onclick="handleLogin()">Sign In →</button>
+                    <p class="auth-demo">Try demo: <strong>demo</strong> / <strong>demo123</strong></p>
+                </div>
+
+                <!-- Register -->
+                <div id="registerForm" class="auth-form hidden">
+                    <h2>Create account</h2>
+                    <p class="auth-sub">Start your organised life today.</p>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="regUser" placeholder="Choose a username" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-wrap">
+                            <input type="password" id="regPass" placeholder="Choose a password" autocomplete="new-password"
+                                   onkeydown="if(event.key==='Enter')handleRegister()">
+                            <button class="eye-btn" onclick="togglePw('regPass',this)">👁</button>
+                        </div>
+                    </div>
+                    <div id="regErr" class="auth-error"></div>
+                    <button class="btn-primary btn-full" onclick="handleRegister()">Create Account →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── APP SCREEN ──────────────────────────────────── -->
+    <div id="appScreen" class="app-screen hidden">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-logo">✦ TaskFlow</div>
+                <button class="icon-btn theme-btn" onclick="toggleDark()" title="Toggle theme" id="themeBtn">🌙</button>
+            </div>
+
+            <div class="user-card">
+                <div class="user-avatar" id="userAvatar">T</div>
+                <div>
+                    <div class="user-name" id="userName">User</div>
+                    <div class="user-status"><span class="dot"></span> Active</div>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <input type="text" id="searchInput" placeholder="Search tasks…" oninput="handleSearch(this.value)">
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-label">Views</div>
+                <a class="nav-item active" onclick="setFilter('all',this)" href="#">
+                    <span>📋</span> All Tasks <span class="nav-badge" id="cAll">0</span>
+                </a>
+                <a class="nav-item" onclick="setFilter('today',this)" href="#">
+                    <span>☀️</span> Today <span class="nav-badge" id="cToday">0</span>
+                </a>
+                <a class="nav-item" onclick="setFilter('upcoming',this)" href="#">
+                    <span>📅</span> Upcoming <span class="nav-badge" id="cUpcoming">0</span>
+                </a>
+                <a class="nav-item" onclick="setFilter('completed',this)" href="#">
+                    <span>✅</span> Completed <span class="nav-badge" id="cDone">0</span>
+                </a>
+                <a class="nav-item" onclick="setFilter('high',this)" href="#">
+                    <span>🔴</span> High Priority <span class="nav-badge" id="cHigh">0</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="nav-label">Boards</span>
+                    <button class="icon-btn" onclick="openBoardModal()" title="New board">+</button>
+                </div>
+                <div id="boardsList"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="nav-label">Tags</div>
+                <div id="tagsList" class="tags-cloud"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="handleLogout()">↩ Sign Out</button>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-content">
+            <div class="main-header">
+                <div class="header-left">
+                    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+                    <div>
+                        <h2 id="viewTitle">All Tasks</h2>
+                        <span id="taskCountBadge" class="count-badge">0 tasks</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <select id="sortSelect" onchange="renderTasks()">
+                        <option value="created">↕ Created</option>
+                        <option value="due">📅 Due Date</option>
+                        <option value="priority">🔴 Priority</option>
+                        <option value="alpha">A–Z</option>
+                    </select>
+                    <div class="view-btns">
+                        <button class="view-btn active" id="btnList" onclick="setView('list')" title="List">≡</button>
+                        <button class="view-btn" id="btnGrid" onclick="setView('grid')" title="Grid">⊞</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-bar-wrap" id="progressWrap">
+                <div class="progress-meta">
+                    <span id="progressLabel">0 of 0 completed</span>
+                    <span id="progressPct">0%</span>
+                </div>
+                <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+            </div>
+
+            <div class="quick-add-section">
+                <div class="quick-add-box">
+                    <span class="plus-icon">+</span>
+                    <input type="text" id="quickInput" placeholder="Add a task… press Enter"
+                           onkeydown="handleQuickAdd(event)">
+                    <button class="btn-detailed" onclick="openTaskModal()">⊕ Detailed</button>
+                </div>
+            </div>
+
+            <div id="taskList" class="task-list"></div>
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">🗂️</div>
+                <h3>Nothing here yet</h3>
+                <p>Add your first task to get started!</p>
+                <button class="btn-primary" onclick="openTaskModal()">+ Add Task</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- ─── TASK MODAL ──────────────────────────────────── -->
+    <div id="taskModal" class="modal-overlay hidden" onclick="if(event.target===this)closeTaskModal()">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalHeading">Add Task</h3>
+                <button class="modal-close" onclick="closeTaskModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Task Title *</label>
+                    <input type="text" id="mTitle" placeholder="What needs to be done?">
+                </div>
+                <div class="form-group">
+                    <label>Notes / Description</label>
+                    <textarea id="mDesc" placeholder="Add details, links, or context…" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="mPriority">
+                            <option value="low">🟢 Low</option>
+                            <option value="medium" selected>🟡 Medium</option>
+                            <option value="high">🔴 High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Due Date</label>
+                        <input type="date" id="mDue">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Board</label>
+                    <select id="mBoard"></select>
+                </div>
+                <div class="form-group">
+                    <label>Tags <span class="label-hint">(comma separated)</span></label>
+                    <input type="text" id="mTags" placeholder="e.g. work, urgent, cs-final">
+                </div>
+                <div class="subtask-section">
+                    <label>Subtasks</label>
+                    <div id="subtaskList"></div>
+                    <div class="subtask-add">
+                        <input type="text" id="subtaskInput" placeholder="Add subtask…"
+                               onkeydown="if(event.key==='Enter')addSubtask()">
+                        <button onclick="addSubtask()">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                <button class="btn-primary" id="mSubmit" onclick="submitTask()">Add Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── BOARD MODAL ─────────────────────────────────── -->
+    <div id="boardModal" class="modal-overlay hidden" onclick="if(event.target===this)closeBoardModal()">
+        <div class="modal-box modal-sm">
+            <div class="modal-header">
+                <h3>New Board</h3>
+                <button class="modal-close" onclick="closeBoardModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Board Name</label>
+                    <input type="text" id="boardName" placeholder="e.g. Work, Personal, Study…"
+                           onkeydown="if(event.key==='Enter')submitBoard()">
+                </div>
+                <div class="form-group">
+                    <label>Colour</label>
+                    <div class="color-picker" id="colorPicker">
+                        <div class="color-dot selected" style="background:#00C896" data-color="#00C896" onclick="pickColor(this)"></div>
+                        <div class="color-dot" style="background:#3B82F6" data-color="#3B82F6" onclick="pickColor(this)"></div>
+                        <div class="color-dot" style="background:#EF4444" data-color="#EF4444" onclick="pickColor(this)"></div>
+                        <div class="color-dot" style="background:#F59E0B" data-color="#F59E0B" onclick="pickColor(this)"></div>
+                        <div class="color-dot" style="background:#8B5CF6" data-color="#8B5CF6" onclick="pickColor(this)"></div>
+                        <div class="color-dot" style="background:#EC4899" data-color="#EC4899" onclick="pickColor(this)"></div>
+                        <div class="color-dot" style="background:#14B8A6" data-color="#14B8A6" onclick="pickColor(this)"></div>
+                        <div class="color-dot" style="background:#F97316" data-color="#F97316" onclick="pickColor(this)"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeBoardModal()">Cancel</button>
+                <button class="btn-primary" onclick="submitBoard()">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ───────────────────────────────────────── -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
