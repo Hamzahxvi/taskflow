@@ -39,7 +39,7 @@ git commit -m "Initial commit"
 ```bash
 gh repo create taskflow --public --push
 # or manually:
-git remote add origin https://github.com/YOUR-USERNAME/taskflow.git
+git remote add origin https://github.com/Hamzahxvi/taskflow.git
 git branch -M main
 git push -u origin main
 ```
