@@ -1,4 +1,4 @@
-# ✦ TaskFlow
+# TaskFlow
 
 A beautiful, Notion-inspired to-do list web app — built with vanilla HTML, CSS, and JavaScript. No frameworks, no backend, no build step.
 
