@@ -1,14 +1,12 @@
 # TaskFlow
 
-A beautiful, Notion-inspired to-do list web app — built with vanilla HTML, CSS, and JavaScript. No frameworks, no backend, no build step.
-
-**[Live Demo →](https://Hamzahxvi.github.io/taskflow)**
+A beautiful, Notion-inspired task management app — built with **React**, **Node.js/Express**, and **SQLite**.
 
 ---
 
 ## Features
 
-- 🔐 **User registration & login** — multiple accounts, all stored locally
+- 🔐 **User registration & login** — JWT-based auth with bcrypt password hashing
 - 📋 **Boards** — organise tasks into colour-coded boards (Personal, Work, Study…)
 - 🏷️ **Tags** — add comma-separated tags and filter by them
 - 🔴 **Priorities** — High / Medium / Low with visual indicators
@@ -24,38 +22,45 @@ A beautiful, Notion-inspired to-do list web app — built with vanilla HTML, CSS
 
 ---
 
-## Deploy to GitHub Pages
+## Tech Stack
 
-### Step 1 — Create a repository
+| Layer | Technology |
+|---|---|
+| Frontend | React 19 + Vite |
+| Backend | Node.js + Express |
+| Database | SQLite (via better-sqlite3) |
+| Auth | JWT + bcrypt |
+| Styling | CSS custom properties, animations |
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+
+
+### Install & Run
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
+# Install all dependencies
+cd client && npm install && cd ..
+cd server && npm install && cd ..
+npm install
+
+# Start both frontend and backend
+npm run dev
 ```
 
-### Step 2 — Push to GitHub
+The app will be available at `http://localhost:5173` (Vite dev server), proxying API calls to `http://localhost:3001`.
+
+### Production Build
 
 ```bash
-gh repo create taskflow --public --push
-# or manually:
-git remote add origin https://github.com/Hamzahxvi/taskflow.git
-git branch -M main
-git push -u origin main
+npm run build
+npm start
 ```
 
-### Step 3 — Enable GitHub Pages
-
-1. Go to your repo on GitHub
-2. Click **Settings** → **Pages**
-3. Under *Source*, select **Deploy from a branch**
-4. Choose **main** branch and `/ (root)` folder
-5. Click **Save**
-
-Your site will be live at:
-`https://Hamzahxvi.github.io/taskflow`
-
-> **Note:** GitHub Pages may take 1–3 minutes to go live after the first push.
+The server serves the built React app from `client/dist/` on port 3001.
 
 ---
 
@@ -63,10 +68,29 @@ Your site will be live at:
 
 ```
 taskflow/
-├── index.html    # App shell + auth + modals
-├── style.css     # All styles, animations, dark mode
-├── script.js     # Auth, task logic, UI rendering
-└── README.md
+├── client/                  # React frontend (Vite)
+│   ├── src/
+│   │   ├── api/            # Axios client & API calls
+│   │   ├── components/
+│   │   │   ├── Auth/       # Login/Register screen
+│   │   │   ├── Common/     # Toast notifications
+│   │   │   ├── Layout/     # Sidebar
+│   │   │   ├── Modals/     # Task & Board modals
+│   │   │   └── Tasks/      # TaskList, TaskCard, QuickAdd
+│   │   ├── context/        # React context (global state)
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── vite.config.js
+├── server/                  # Express backend
+│   ├── routes/
+│   │   ├── auth.js         # Register, login, me
+│   │   ├── tasks.js        # CRUD + reorder
+│   │   └── boards.js       # CRUD
+│   ├── middleware/
+│   │   └── auth.js         # JWT verification
+│   ├── db.js               # SQLite setup + seed data
+│   └── index.js            # Express server entry
+└── package.json            # Root scripts (dev, build, start)
 ```
 
 ---
@@ -79,28 +103,26 @@ taskflow/
 
 ---
 
-## Tech Stack
+## API Endpoints
 
-- **HTML5** — semantic structure
-- **CSS3** — custom properties, animations, grid, flexbox
-- **Vanilla JS** — no frameworks
-- **localStorage** — client-side persistence per user
-- **Google Fonts** — Fraunces (serif) + Plus Jakarta Sans
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/api/auth/register` | No | Create account |
+| POST | `/api/auth/login` | No | Sign in |
+| GET | `/api/auth/me` | Yes | Get current user |
+| GET | `/api/tasks` | Yes | List all tasks |
+| POST | `/api/tasks` | Yes | Create task |
+| PUT | `/api/tasks/:id` | Yes | Update task |
+| DELETE | `/api/tasks/:id` | Yes | Delete task |
+| PUT | `/api/tasks/reorder/batch` | Yes | Reorder tasks |
+| GET | `/api/boards` | Yes | List all boards |
+| POST | `/api/boards` | Yes | Create board |
+| DELETE | `/api/boards/:id` | Yes | Delete board |
 
 ---
 
 ## Notes
 
-> ⚠️ This is a **client-side only** app. Passwords are Base64 encoded in localStorage — suitable for a portfolio project, but **not for production use**. For a real app, use a backend with proper hashing (bcrypt) and a database.
-
----
-
-## Screenshots
-
-| Light Mode | Dark Mode |
-|:---:|:---:|
-| Auth screen with floating cards | App with boards, tags, progress |
-
----
+The original vanilla HTML/CSS/JS version is preserved in the root (`index.html`, `style.css`, `script.js`). The new React + Express version lives in `client/` and `server/`.
 
 Made with ♥ as a final year CS project.

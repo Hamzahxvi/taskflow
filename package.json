@@ -1,0 +1,16 @@
+{
+  "name": "taskflow",
+  "version": "2.0.0",
+  "description": "TaskFlow - A beautiful task management app",
+  "private": true,
+  "scripts": {
+    "dev:server": "node server/index.js",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "npm run build --prefix client",
+    "start": "node server/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
